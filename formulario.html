@@ -1642,6 +1642,12 @@ async function enviarProposta(prefix, dados) {
       dados
     });
     if (error) throw error;
+    // UF de naturalidade não entra no inserir_proposta — completa logo após o insert.
+    const novaId = data?.[0]?.id;
+    if (novaId && dados.uf_naturalidade) {
+      try { await sb.rpc('completar_uf_naturalidade', { p_id: novaId, p_uf: dados.uf_naturalidade }); }
+      catch(e) { console.warn('uf_naturalidade não salva:', e); }
+    }
     const protocolo = data?.[0]?.protocolo || 'sem protocolo';
     $('protocolo-display').textContent = protocolo;
     $('form-pf').classList.add('hidden');
