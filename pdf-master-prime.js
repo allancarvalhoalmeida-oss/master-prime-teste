@@ -598,20 +598,41 @@
       // foi bloqueado pelo navegador, faz fallback pra download direto.
       try { pdf.setProperties({ title: filename.replace(/\.pdf$/, '') }); } catch(e){}
       const _blob = pdf.output('blob');
-      // Embrulha como File com o nome certo — assim, quando o usuário clicar
-      // em "Download" dentro do leitor PDF do navegador, o nome sugerido é o
-      // filename (não o UUID do blob).
       let _named;
       try { _named = new File([_blob], filename, { type: 'application/pdf' }); }
       catch (e) { _named = _blob; }
       const _url = URL.createObjectURL(_named);
       if (_winPdf && !_winPdf.closed) {
-        _winPdf.location.href = _url;
+        // Embrulha o PDF num wrapper HTML: barra superior com o filename +
+        // botão "Baixar PDF" que usa anchor download (assim o nome sugerido
+        // no download é o filename certo, não o UUID do blob).
+        try {
+          const _safeFn = String(filename).replace(/[<>"&']/g, '');
+          const _html = '<!DOCTYPE html><html lang="pt-BR"><head>' +
+            '<meta charset="UTF-8"><title>' + _safeFn + '</title>' +
+            '<style>html,body{margin:0;padding:0;height:100%;background:#525659;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}' +
+            '.mp-bar{background:#2D3F5E;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:14px;height:42px;box-sizing:border-box;}' +
+            '.mp-title{flex:1;font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}' +
+            '.mp-dl{background:#fff;color:#2D3F5E;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12.5px;letter-spacing:.2px;}' +
+            '.mp-dl:hover{background:#F1F5F9;}' +
+            'iframe{border:0;width:100%;height:calc(100vh - 42px);display:block;}' +
+            '</style></head><body>' +
+            '<div class="mp-bar"><span class="mp-title">' + _safeFn + '</span>' +
+            '<a class="mp-dl" href="' + _url + '" download="' + _safeFn + '">⬇ Baixar PDF</a></div>' +
+            '<iframe src="' + _url + '"></iframe>' +
+            '</body></html>';
+          _winPdf.document.open();
+          _winPdf.document.write(_html);
+          _winPdf.document.close();
+        } catch (e) {
+          // Se algo falhar no wrapper, navega direto pro blob.
+          _winPdf.location.href = _url;
+        }
       } else {
         // Popup bloqueado — baixa o PDF como fallback.
         pdf.save(filename);
       }
-      setTimeout(function(){ try { URL.revokeObjectURL(_url); } catch(e){} }, 60000);
+      setTimeout(function(){ try { URL.revokeObjectURL(_url); } catch(e){} }, 120000);
       try { if (window.PortalLog) window.PortalLog.registrar('pdf_gerado', opts.tituloEstrategia || opts.subtitulo || opts.filename || ''); } catch(e){}
     } finally {
       wrap.remove();
@@ -760,27 +781,26 @@
     return `
       <div style="width:1300px; background:#fff; font-family:'Inter','Helvetica Neue',-apple-system,system-ui,sans-serif; color:#0F172A; padding:44px 52px 32px; box-sizing:border-box;">
 
-        <!-- BARRA TOPO: logo Master Prime real à esquerda + pill admin à direita -->
-        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:30px; border-bottom:1px solid #EEF2F6;">
-          <img src="${LOGO_DATA_URL}" alt="Master Prime" style="height:96px; width:auto; display:block;">
-          <div style="display:inline-flex; align-items:center; gap:9px; background:#F8FAFC; border:1px solid #E2E8F0; color:#0F172A; padding:8px 18px 8px 14px; border-radius:999px; font-size:13px; font-weight:600; letter-spacing:0.2px;">
-            <span style="width:8px; height:8px; border-radius:50%; background:${theme.corAcento};"></span>
-            ${opts.representanteTexto || theme.repTexto}
-          </div>
-        </div>
-
-        <!-- HEADER PRINCIPAL: tag + título sans + admin logo -->
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:34px; margin-bottom:32px;">
+        <!-- HEADER PRINCIPAL: tag + título sans + caixa dupla (MP + admin logo) -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px;">
           <div style="max-width:74%;">
             <div style="display:inline-block; font-size:11.5px; font-weight:700; color:${theme.corAcento}; letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; padding:6px 14px; background:${theme.corAcento}14; border-radius:999px;">Simulação de Crédito</div>
             <div style="font-family:'Inter',-apple-system,system-ui,sans-serif; font-size:54px; font-weight:700; color:#0F172A; line-height:1.05; letter-spacing:-1.4px;">${opts.subtitulo || 'Consórcio'}</div>
             ${opts.subtituloSecundario ? `<div style="font-size:18px; color:#64748B; font-weight:500; margin-top:10px; letter-spacing:-0.1px;">${opts.subtituloSecundario}</div>` : ''}
           </div>
           <div style="display:flex; flex-direction:column; align-items:flex-end;">
-            <div style="width:96px; height:96px; border-radius:18px; background:#fff; border:1px solid #E2E8F0; display:flex; align-items:center; justify-content:center; padding:10px; box-shadow:0 1px 2px rgba(15,23,42,0.04);">
-              <img src="${logoUrl}" alt="Admin" style="max-width:100%; max-height:100%; object-fit:contain;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="height:96px; padding:0 4px; border-radius:18px; background:#fff; border:1px solid #E2E8F0; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 2px rgba(15,23,42,0.04);">
+                <img src="${LOGO_DATA_URL}" alt="Master Prime" style="height:92px; width:auto; display:block;">
+              </div>
+              ${opts.hideAdminLogo ? '' : `
+              <div style="width:1px; height:56px; background:#E2E8F0;"></div>
+              <div style="width:96px; height:96px; border-radius:18px; background:#fff; border:1px solid #E2E8F0; display:flex; align-items:center; justify-content:center; padding:10px; box-shadow:0 1px 2px rgba(15,23,42,0.04);">
+                <img src="${logoUrl}" alt="Admin" style="max-width:100%; max-height:100%; object-fit:contain;">
+              </div>
+              `}
             </div>
-            <div style="font-size:10.5px; color:#94A3B8; letter-spacing:1.5px; text-transform:uppercase; margin-top:12px; font-weight:600;">Representante Autorizado</div>
+            <div style="font-size:10.5px; color:#94A3B8; letter-spacing:1.5px; text-transform:uppercase; margin-top:12px; font-weight:600;">${opts.hideAdminLogo ? 'Master Prime' : 'Representante Autorizado'}</div>
           </div>
         </div>
 
@@ -898,20 +918,41 @@
       // foi bloqueado pelo navegador, faz fallback pra download direto.
       try { pdf.setProperties({ title: filename.replace(/\.pdf$/, '') }); } catch(e){}
       const _blob = pdf.output('blob');
-      // Embrulha como File com o nome certo — assim, quando o usuário clicar
-      // em "Download" dentro do leitor PDF do navegador, o nome sugerido é o
-      // filename (não o UUID do blob).
       let _named;
       try { _named = new File([_blob], filename, { type: 'application/pdf' }); }
       catch (e) { _named = _blob; }
       const _url = URL.createObjectURL(_named);
       if (_winPdf && !_winPdf.closed) {
-        _winPdf.location.href = _url;
+        // Embrulha o PDF num wrapper HTML: barra superior com o filename +
+        // botão "Baixar PDF" que usa anchor download (assim o nome sugerido
+        // no download é o filename certo, não o UUID do blob).
+        try {
+          const _safeFn = String(filename).replace(/[<>"&']/g, '');
+          const _html = '<!DOCTYPE html><html lang="pt-BR"><head>' +
+            '<meta charset="UTF-8"><title>' + _safeFn + '</title>' +
+            '<style>html,body{margin:0;padding:0;height:100%;background:#525659;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}' +
+            '.mp-bar{background:#2D3F5E;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:14px;height:42px;box-sizing:border-box;}' +
+            '.mp-title{flex:1;font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}' +
+            '.mp-dl{background:#fff;color:#2D3F5E;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12.5px;letter-spacing:.2px;}' +
+            '.mp-dl:hover{background:#F1F5F9;}' +
+            'iframe{border:0;width:100%;height:calc(100vh - 42px);display:block;}' +
+            '</style></head><body>' +
+            '<div class="mp-bar"><span class="mp-title">' + _safeFn + '</span>' +
+            '<a class="mp-dl" href="' + _url + '" download="' + _safeFn + '">⬇ Baixar PDF</a></div>' +
+            '<iframe src="' + _url + '"></iframe>' +
+            '</body></html>';
+          _winPdf.document.open();
+          _winPdf.document.write(_html);
+          _winPdf.document.close();
+        } catch (e) {
+          // Se algo falhar no wrapper, navega direto pro blob.
+          _winPdf.location.href = _url;
+        }
       } else {
         // Popup bloqueado — baixa o PDF como fallback.
         pdf.save(filename);
       }
-      setTimeout(function(){ try { URL.revokeObjectURL(_url); } catch(e){} }, 60000);
+      setTimeout(function(){ try { URL.revokeObjectURL(_url); } catch(e){} }, 120000);
       try { if (window.PortalLog) window.PortalLog.registrar('pdf_gerado', opts.tituloEstrategia || opts.subtitulo || opts.filename || ''); } catch(e){}
     } finally {
       wrap.remove();
@@ -919,5 +960,5 @@
   }
 
   // ─── EXPORT PUBLIC API ───
-  window.PdfMasterPrime = { gerar, gerarComercial, preview, buildTemplate, buildTemplateComercial, _internals: { DISCLAIMER_PADRAO, NAVY, CARD_BG } };
+  window.PdfMasterPrime = { gerar, gerarComercial, preview, buildTemplate, buildTemplateComercial, LOGO_ADMIN_DATA, ADMIN_THEME, _internals: { DISCLAIMER_PADRAO, NAVY, CARD_BG } };
 })();

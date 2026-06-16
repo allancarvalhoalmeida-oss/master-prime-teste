@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="pdf-master-prime.js?v=20260526e"></script>
+<script src="pdf-master-prime.js?v=20260615f"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="simulacao-store.js"></script>
 <style>
@@ -45,7 +45,18 @@
   main { max-width: 1440px; margin: 0 auto; padding: 18px 24px 12px; }
   h2.section-title { font-size: 19px; font-weight: 600; color: var(--mp-navy); margin-bottom: 0; text-align: center; letter-spacing: 0.3px; }
   h2.section-title .tag-bank { color: var(--mp-teal-dark); }
+  body.neutral-mode h2.section-title .tag-bank { color: var(--mp-navy); }
   .subtitle { font-size: 11px; color: var(--text-muted); text-align: center; margin-bottom: 14px; letter-spacing: 0.8px; text-transform: uppercase; }
+  /* Toggle Modo Neutro (estilo Erik — barra à direita acima do título) */
+  .neutral-row { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin: 6px 0 10px; padding-right: 4px; }
+  .neutral-row .neutral-label { font-size: 13px; color: var(--text); user-select: none; }
+  .neutral-row .neutral-label .muted { color: var(--text-muted); font-weight: 400; }
+  .neutral-row .neutral-switch { position: relative; width: 42px; height: 22px; background: #CBD5E1; border-radius: 999px; transition: 0.2s; flex-shrink: 0; cursor: pointer; border: 0; padding: 0; }
+  .neutral-row .neutral-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,.20); }
+  .neutral-row .neutral-switch.on { background: var(--mp-navy); }
+  .neutral-row .neutral-switch.on::after { left: 23px; }
+  /* Esconde tag-admin do header global quando neutral */
+  body.neutral-mode .tag-admin { display: none; }
 
   /* Layout single-screen 2 colunas */
   .layout-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; align-items: start; }
@@ -81,21 +92,21 @@
   /* Output cards */
   .result { background: var(--soft-blue); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .result strong { font-size: 10.5px; color: var(--mp-navy); letter-spacing: 0.8px; text-transform: uppercase; font-weight: 500; }
-  .result .value { font-size: 14px; font-weight: 600; color: var(--mp-navy); font-family: 'DM Mono', ui-monospace, monospace; }
+  .result .value { font-size: 14px; font-weight: 600; color: var(--mp-navy); font-family: 'Inter', -apple-system, system-ui, sans-serif; }
 
   .result-primary { background: linear-gradient(135deg, var(--mp-navy) 0%, var(--mp-navy-soft) 100%); color: white; padding: 10px 14px; border-radius: 7px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .result-primary strong { color: rgba(255,255,255,0.75); font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
-  .result-primary .value { font-size: 16px; font-weight: 700; color: #fff; font-family: 'DM Mono', ui-monospace, monospace; }
+  .result-primary .value { font-size: 16px; font-weight: 700; color: #fff; font-family: 'Inter', -apple-system, system-ui, sans-serif; }
 
   .result-teal { background: var(--soft-teal); border: 1px solid #C2E5EA; border-radius: 6px; padding: 9px 13px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .result-teal strong { font-size: 10.5px; color: var(--mp-teal-dark); letter-spacing: 0.8px; text-transform: uppercase; font-weight: 600; }
-  .result-teal .value { font-size: 15px; font-weight: 700; color: var(--mp-navy); font-family: 'DM Mono', ui-monospace, monospace; }
+  .result-teal .value { font-size: 15px; font-weight: 700; color: var(--mp-navy); font-family: 'Inter', -apple-system, system-ui, sans-serif; }
 
   /* Output box (lado direito) */
   .out-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; }
   .out-box .lbl { font-size: 10px; color: var(--text-muted); letter-spacing: 0.7px; text-transform: uppercase; font-weight: 600; margin-bottom: 3px; display: block; }
   .out-box .lbl small { text-transform: none; font-weight: 500; color: var(--text-light); letter-spacing: 0.2px; }
-  .out-box .val { font-size: 16px; font-weight: 700; color: var(--mp-navy); font-family: 'DM Mono', ui-monospace, monospace; }
+  .out-box .val { font-size: 16px; font-weight: 700; color: var(--mp-navy); font-family: 'Inter', -apple-system, system-ui, sans-serif; }
   .out-box.primary { background: linear-gradient(135deg, var(--mp-navy) 0%, var(--mp-navy-soft) 100%); border-color: var(--mp-navy); }
   .out-box.primary .lbl { color: rgba(255,255,255,0.7); }
   .out-box.primary .val { color: #fff; }
@@ -125,7 +136,7 @@
   @media (max-width: 768px) { .resumo-grid { grid-template-columns: 1fr; } }
   .resumo-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--soft-blue); border-radius: 6px; }
   .resumo-row .lbl { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
-  .resumo-row .val { font-size: 14px; font-weight: 700; color: var(--mp-navy); font-family: 'DM Mono', ui-monospace, monospace; }
+  .resumo-row .val { font-size: 14px; font-weight: 700; color: var(--mp-navy); font-family: 'Inter', -apple-system, system-ui, sans-serif; }
   .resumo-row.highlight { background: var(--soft-teal); border: 1px solid #C2E5EA; }
 
   /* Pós contemplação */
@@ -135,7 +146,7 @@
   .pos-card h4 { font-size: 11.5px; font-weight: 700; color: var(--mp-navy); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
   .pos-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; }
   .pos-row .lbl { color: var(--text-muted); font-size: 12px; letter-spacing: 0.3px; }
-  .pos-row .val { font-weight: 600; color: var(--mp-navy); font-family: 'DM Mono', ui-monospace, monospace; }
+  .pos-row .val { font-weight: 600; color: var(--mp-navy); font-family: 'Inter', -apple-system, system-ui, sans-serif; }
   .pos-row.highlight { background: #fff; padding: 10px 12px; border-radius: 6px; margin: 4px -4px; border: 1px solid var(--border); }
   .pos-row.highlight .val { font-size: 16px; font-weight: 700; color: var(--mp-teal-dark); }
 
@@ -197,7 +208,12 @@
 <main>
   <div id="simStoreMount" style="max-width:1440px; margin:0 auto 8px; padding:0;"></div>
 
-  <h2 class="section-title">Simulador de Crédito · <span class="tag-bank">Porto · Auto</span></h2>
+  <div class="neutral-row">
+    <label class="neutral-label" for="btnModoNeutro">Modo neutro <span class="muted">(sem identificação da administradora)</span></label>
+    <button type="button" class="neutral-switch" id="btnModoNeutro" role="switch" aria-checked="false" title="Gera PDF sem identificação da administradora — usa identidade Master Prime padrão"></button>
+  </div>
+
+  <h2 class="section-title">Simulador de Crédito · <span class="tag-bank" id="sim-titulo-banco">Porto · Auto</span></h2>
   <p class="subtitle">Cálculo de proposta, contemplação e estratégias de lance</p>
 
   <div class="layout-grid">
@@ -379,7 +395,7 @@
       <!-- Detalhes complementares (sempre visíveis pra consultor) -->
       <details style="background:#fff; border:1px solid var(--border); border-radius:7px; padding:8px 11px; font-size:11.5px;">
         <summary style="cursor:pointer; color:var(--text-muted); font-weight:600; letter-spacing:0.4px; text-transform:uppercase; font-size:10.5px;">Detalhes ▾</summary>
-        <div style="margin-top:8px; display:grid; gap:6px; font-family:'DM Mono', ui-monospace, monospace;">
+        <div style="margin-top:8px; display:grid; gap:6px;">
           <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted)">Categoria</span><strong id="pa-categoria">—</strong></div>
           <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted)">Saldo devedor</span><strong id="pa-saldoDevedor">—</strong></div>
           <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted)">Parcela int. PF</span><strong id="pa-parcelaPF">—</strong></div>
@@ -789,6 +805,27 @@ get('pa-modal-pctLivre').addEventListener('keydown', e => {
   if (e.key === 'Enter') get('pa-modal-confirmar').click();
 });
 
+// ─── Toggle Modo Neutro (sem identificação da administradora) ───────
+window._paNeutro = false;
+function aplicaModoNeutro(on) {
+  window._paNeutro = !!on;
+  document.body.classList.toggle('neutral-mode', !!on);
+  const btn = document.getElementById('btnModoNeutro');
+  if (btn) {
+    btn.classList.toggle('on', !!on);
+    btn.setAttribute('aria-checked', !!on);
+  }
+  const tit = document.getElementById('sim-titulo-banco');
+  if (tit) tit.textContent = on ? 'Consórcio · Auto' : 'Porto · Auto';
+}
+(function() {
+  const btn = document.getElementById('btnModoNeutro');
+  if (btn) btn.addEventListener('click', () => aplicaModoNeutro(!window._paNeutro));
+  // Clicar na label também ativa
+  const lbl = document.querySelector('.neutral-label');
+  if (lbl) lbl.addEventListener('click', () => aplicaModoNeutro(!window._paNeutro));
+})();
+
 // ─── Toggle de modo de redução (parcela vs prazo) ────────────────────
 window._paRedmode = 'parcela';
 function aplicaRedmode(modo) {
@@ -962,15 +999,17 @@ function _montarPdfComercialPortoAuto() {
   const _pctApg = _categoria > 0 ? _fmtPct((_apgRS / _categoria) * 100) : '0,00';
   const _pctTot = _categoria > 0 ? _fmtPct((_totRS / _categoria) * 100) : '0,00';
 
+  const _neutro = !!window._paNeutro;
   return {
-    filename: 'porto-consorcio-auto',
-    logoAdmin: 'porto',
+    filename: _neutro ? 'simulacao-consorcio-auto' : 'porto-consorcio-auto',
+    logoAdmin: 'porto', // Porto já é navy (mesmo neutro continua porto pra manter tema azul)
+    hideAdminLogo: _neutro,
     titulo: 'Simulador de Crédito',
-    subtitulo: 'Porto · Auto',
+    subtitulo: _neutro ? 'Consórcio · Auto' : 'Porto · Auto',
     subtituloSecundario: redutorPct && redutorPct !== '0%'
       ? `(Redução de ${redutorPct} até a Contemplação)`
       : '(Sem redutor de parcela)',
-    representanteTexto: 'Consórcio Porto',
+    representanteTexto: _neutro ? 'Master Prime' : 'Consórcio Porto',
     inputs: [
       { label: 'Taxa Administrativa', value: _v('pa-taxaAdm') || '0,00 %' },
       { label: 'Fundo Reserva', value: _v('pa-fundo') || '0,00 %' },
