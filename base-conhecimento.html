@@ -108,6 +108,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-s
 }
 .kb-item:hover { border-color: var(--border2); }
 .kb-item.open { border-color: var(--mp-teal); box-shadow: 0 3px 12px rgba(45,63,94,.07); }
+@keyframes maiaCardGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(13, 148, 136, .55), 0 3px 12px rgba(45,63,94,.10); border-color: var(--mp-teal); }
+  35%  { box-shadow: 0 0 0 6px rgba(13, 148, 136, .14), 0 6px 20px rgba(13,148,136,.18); border-color: var(--mp-teal); }
+  100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0), 0 3px 12px rgba(45,63,94,.07); border-color: var(--mp-teal); }
+}
+.kb-item.maia-highlight { animation: maiaCardGlow 2.2s ease-out; }
 .kb-q {
   width: 100%; text-align: left; background: transparent; border: 0; cursor: pointer;
   padding: 15px 16px; display: flex; align-items: center; gap: 12px;
@@ -376,6 +382,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-s
   font-size: 11px; color: var(--text2); font-weight: 500;
   display: inline-block;
 }
+button.kbc-src-link {
+  background: transparent; border: 1px solid transparent;
+  text-align: left; font: inherit; color: var(--mp-teal); font-weight: 600;
+  padding: 4px 8px; border-radius: 6px; cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+button.kbc-src-link:hover {
+  background: rgba(13, 148, 136, .08); border-color: rgba(13, 148, 136, .25);
+  color: var(--mp-teal);
+}
+button.kbc-src-link:focus-visible {
+  outline: 2px solid rgba(13, 148, 136, .55); outline-offset: 1px;
+}
 
 .kbc-typing {
   display: flex; align-items: center; gap: 6px;
@@ -494,13 +513,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-s
 
 </div>
 
-<script src="kb-bradesco.js?v=20260618a"></script>
-<script src="kb-porto.js?v=20260616b"></script>
-<script src="kb-itau.js?v=20260603a"></script>
-<script src="kb-fgts.js?v=20260611a"></script>
+<script src="kb-bradesco.js?v=20260624e"></script>
+<script src="kb-porto.js?v=20260624c"></script>
+<script src="kb-itau.js?v=20260625a"></script>
+<script src="kb-fgts.js?v=20260622c"></script>
 <script src="kb-comissoes.js?v=20260612d"></script>
 <script src="kb-chat-config.js?v=20260619d"></script>
-<script src="kb-chat.js?v=20260619g"></script>
+<script src="kb-chat.js?v=20260624e"></script>
 <script>
 (function () {
   var ADM = window.KB_ADMIN || {};
@@ -765,7 +784,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-s
   // ── item HTML ──
   function itemHTML(e, showBadge) {
     var badge = showBadge ? '<span class="badge">' + esc(e.categoria_label) + '</span>' : '';
-    return '<div class="kb-item">' +
+    var slug = norm(e.titulo);
+    return '<div class="kb-item" data-titulo-slug="' + esc(slug) + '">' +
       '<button class="kb-q">' + badge +
         '<span class="q-text">' + esc(e.titulo) + '</span>' +
         '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
@@ -773,6 +793,110 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-s
       '<div class="kb-a"><div class="kb-a-inner">' + renderConteudo(e.conteudo) + '</div></div>' +
     '</div>';
   }
+
+  // ── Função global: abrir card específico (usada pela Maia) ──
+  // adm: 'porto' | 'itau' | 'bradesco' | 'fgts' | 'comissoes'
+  // titulo: string com o título exato (ou aproximado) do card
+  window.maiaAbrirCard = function (adm, titulo) {
+    var key = (adm || '').toLowerCase().trim();
+    // Mapeia variações de nome → key interno
+    var map = { 'porto': 'porto', 'itau': 'itau', 'itaú': 'itau', 'bradesco': 'bradesco',
+                'fgts': 'fgts', 'fgts caixa': 'fgts', 'caixa': 'fgts',
+                'comissões': 'comissoes', 'comissoes': 'comissoes' };
+    key = map[key] || key;
+    if (!ADM[key]) return;
+
+    var targetSlug = norm(titulo || '');
+    function abrir() {
+      // Fecha o chat da Maia se estiver aberto
+      try {
+        if (window.MaiaChat && typeof window.MaiaChat.close === 'function') {
+          window.MaiaChat.close();
+        } else {
+          var pane = document.getElementById('kbc-pane');
+          if (pane) pane.classList.remove('open');
+        }
+      } catch (e) {}
+
+      // Procura o card no DOM (limpa filtro/busca pra garantir que está visível)
+      var content = document.getElementById('content');
+      if (!content) return;
+      var item = content.querySelector('.kb-item[data-titulo-slug="' + targetSlug + '"]');
+      // Fallback inteligente: score por overlap de palavras (≥3 letras, ignora stopwords)
+      if (!item && targetSlug) {
+        var STOPWORDS = { 'a':1,'o':1,'as':1,'os':1,'de':1,'do':1,'da':1,'dos':1,'das':1,'e':1,'em':1,
+          'no':1,'na':1,'nos':1,'nas':1,'um':1,'uma':1,'para':1,'pra':1,'por':1,'com':1,'sem':1,
+          'que':1,'qual':1,'quais':1,'quem':1,'quanto':1,'quanta':1,'quantos':1,'quantas':1,
+          'como':1,'onde':1,'quando':1,'porque':1,'porquê':1,'porq':1,'tem':1,'ter':1,'tinha':1,
+          'ser':1,'sou':1,'sao':1,'são':1,'foi':1,'era':1,'eh':1,'é':1,'meu':1,'minha':1,'seu':1,'sua':1,
+          'esse':1,'essa':1,'esses':1,'essas':1,'isso':1,'aquilo':1,'mais':1,'menos':1,'muito':1,
+          'pode':1,'posso':1,'podem':1,'podia':1,'so':1,'só':1,'também':1,'tambem':1
+        };
+        function tokens(s) {
+          return (s || '').split(/[^a-z0-9]+/).filter(function(t){
+            return t && t.length >= 3 && !STOPWORDS[t];
+          });
+        }
+        var qTokens = tokens(targetSlug);
+        if (qTokens.length) {
+          var all = content.querySelectorAll('.kb-item[data-titulo-slug]');
+          var best = null, bestScore = 0;
+          for (var i = 0; i < all.length; i++) {
+            var cTokens = tokens(all[i].getAttribute('data-titulo-slug') || '');
+            // Score = nº de palavras em comum
+            var overlap = 0;
+            for (var j = 0; j < qTokens.length; j++) {
+              if (cTokens.indexOf(qTokens[j]) >= 0) overlap++;
+            }
+            if (overlap > bestScore) { bestScore = overlap; best = all[i]; }
+          }
+          // Só usa se pelo menos 2 palavras em comum (ou metade do query, o que for menor)
+          var minScore = Math.min(2, qTokens.length);
+          if (best && bestScore >= minScore) item = best;
+        }
+      }
+      if (!item) return;
+
+      // Abre o accordion
+      if (!item.classList.contains('open')) item.classList.add('open');
+      // Anima destaque
+      item.classList.remove('maia-highlight');
+      void item.offsetWidth; // reset anim
+      item.classList.add('maia-highlight');
+      setTimeout(function () { item.classList.remove('maia-highlight'); }, 2400);
+      // Rola até o card — usamos scroll instantâneo (smooth às vezes é ignorado
+      // quando há reflow concorrente após loadAdmin). O glow já chama atenção.
+      try {
+        item.scrollIntoView({ block: 'center' });
+      } catch (e) {
+        // fallback antigo (alguns browsers não aceitam o options object)
+        item.scrollIntoView();
+      }
+    }
+
+    // Se a aba ativa não é a certa, troca e espera o render
+    if (activeAdm !== key) {
+      // Limpa filtro/busca antes de trocar
+      try { if (input) input.value = ''; query = ''; activeChip = 'todas'; } catch(e) {}
+      loadAdmin(key);
+      setTimeout(abrir, 80);
+    } else {
+      // Se tinha filtro ativo ('todas' ou outro chip), garante que renderiza tudo
+      if (activeChip !== 'todas' || query) {
+        activeChip = 'todas';
+        query = '';
+        if (input) input.value = '';
+        if (clearBtn) clearBtn.classList.remove('show');
+        document.querySelectorAll('.chip').forEach(function (x) {
+          x.classList.toggle('active', x.getAttribute('data-cat') === 'todas');
+        });
+        render();
+        setTimeout(abrir, 50);
+      } else {
+        abrir();
+      }
+    }
+  };
 
   // ── render ──
   function render() {
@@ -827,7 +951,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-s
   function renderDownloads() {
     var box = document.getElementById('downloads');
     if (!box || !DOWNLOADS.length) return;
-    box.innerHTML = DOWNLOADS.map(function (d) {
+    // Ordena alfabeticamente pelo título (pt-BR, ignora acentos e maiúsculas)
+    var dlOrdenado = DOWNLOADS.slice().sort(function (a, b) {
+      return (a.titulo || '').localeCompare((b.titulo || ''), 'pt-BR', { sensitivity: 'base' });
+    });
+    box.innerHTML = dlOrdenado.map(function (d) {
       return '<div class="dl-card">' +
         '<div class="dl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>' +
         '<div class="dl-titulo">' + esc(d.titulo) + '</div>' +
