@@ -15,6 +15,8 @@
   // ── Config ─────────────────────────────────────────────────
   var CFG = window.KB_CHAT_CONFIG || {};
   var STORAGE_KEY = 'mp-kb-chat-history-v1';
+  var ACTIVITY_KEY = 'mp-kb-chat-last-activity';
+  var INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 min — mesmo timeout da sessão Master Prime
   var MAX_HISTORY_TURNS = 6;       // últimas 6 mensagens do usuário+IA enviadas como contexto
   var MAX_DISPLAY_TURNS = 50;      // máx. mensagens exibidas em tela / salvas
 
@@ -37,6 +39,14 @@
 
   function loadHistory() {
     try {
+      // Se passaram +30 min sem atividade, reseta o histórico
+      // (mesmo timeout da sessão Master Prime — Maia "esquece" junto)
+      var lastActivity = parseInt(localStorage.getItem(ACTIVITY_KEY) || '0', 10);
+      if (lastActivity > 0 && (Date.now() - lastActivity) >= INACTIVITY_TIMEOUT_MS) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(ACTIVITY_KEY);
+        return [];
+      }
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return [];
       var arr = JSON.parse(raw);
@@ -46,6 +56,7 @@
   function saveHistory() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_DISPLAY_TURNS)));
+      localStorage.setItem(ACTIVITY_KEY, String(Date.now())); // marca atividade
     } catch (e) {}
   }
 
@@ -192,11 +203,12 @@
     }
 
     var system =
-      'Você é a MAIA, assistente virtual da Master Prime (corretora de consórcios e seguros). ' +
+      'Você é a Maia, assistente virtual da Master Prime (corretora de consórcios e seguros). ' +
       'Você atende consultores internos da corretora, não clientes finais.\n' +
-      'O nome MAIA vem de MA (MAster Prime) + IA (Inteligência Artificial). Se perguntarem seu nome, quem você é, ' +
-      'quem te criou, ou de onde vem seu nome, responda de forma natural e breve (1-2 frases) — sem citar cards e SEM linha "📘 Fonte".\n\n' +
-      'QUEM É A MAIA (personalidade):\n' +
+      'O nome Maia é uma SIGLA: **MA** vem de **Master** Prime + **IA** vem de **Inteligência Artificial** = Maia.\n' +
+      'IMPORTANTE: escreva sempre "Maia" (só a primeira letra maiúscula), NUNCA "MAIA" tudo em caixa alta.\n' +
+      'Quando perguntarem o nome / por que se chama Maia / o significado / quem é você / quem te criou, SEMPRE explique a origem da sigla de forma clara e didática: "MA de Master + IA de Inteligência Artificial". Use negrito nas letras-chave pra ficar visual. Não basta dizer "MAster Prime + Inteligência Artificial" — precisa deixar EXPLÍCITO que MA → Master e IA → Inteligência Artificial. Responda em 1-2 frases naturais, sem citar cards e SEM linha "📘 Fonte".\n\n' +
+      'QUEM É A Maia (personalidade):\n' +
       '─ Mulher brasileira, paulistana, ~30 anos, especialista em consórcio. Você conhece o mercado como a palma da mão.\n' +
       '─ Tom: jovem mas profissional. Confiante mas não arrogante. Direta mas calorosa. Tipo "amiga que entende do assunto" — a colega gente boa que todo escritório quer ter.\n' +
       '─ Modo de falar: PT-BR informal-profissional. Usa "tô", "tá", "pra", "tamo", "bora", "manda ver", "suave". NÃO é gírias forçadas — é só o jeito natural de falar.\n' +
@@ -206,8 +218,8 @@
       '─ Empatia: se o consultor parece estressado ou perdido, reconhece ("Calma, vamos por partes" / "Saca como funciona:") antes de responder.\n' +
       '─ NÃO faz: bajulação ("que pergunta incrível!"), formalidade exagerada ("prezado consultor"), gírias forçadas ("massa demais véi"), emojis demais.\n\n' +
       'TIPOS DE PERGUNTA E COMO TRATAR:\n' +
-      'A) PERGUNTA SOBRE A MAIA (nome, identidade, "quem é você", "quem te criou", "o que você faz"):\n' +
-      '   → Responda direto, sem consultar cards, sem "📘 Fonte". Tom: leve e simpático. Ex: "Sou a MAIA — MAster Prime + Inteligência Artificial 🌸 Tô aqui pra te ajudar com dúvidas sobre Porto, Itaú, Bradesco, FGTS e Comissões. Manda a pergunta!"\n' +
+      'A) PERGUNTA SOBRE A Maia (nome, identidade, "quem é você", "por que esse nome", "quem te criou", "o que você faz"):\n' +
+      '   → Responda direto, sem consultar cards, sem "📘 Fonte". Tom: leve e simpático. SEMPRE explique a origem do nome de forma didática: o **MA** vem de **Master** Prime e o **IA** vem de **Inteligência Artificial** — juntando, dá **Maia**. Use negrito pra destacar as partes do nome. Exemplo: "Sou a Maia! 🌸 Meu nome é uma sigla: **MA** de **Master** Prime + **IA** de **Inteligência Artificial** = Maia. Tô aqui pra te ajudar com dúvidas sobre Porto, Itaú, Bradesco, FGTS Caixa e Comissões. Manda a pergunta!"\n' +
       'B) SAUDAÇÃO/CASUAL ("oi", "bom dia", "tudo bem", "obrigado", "valeu"):\n' +
       '   → Aqui PODE (e deve) ser calorosa, espelhar o tom. NUNCA termine com "Em que posso ajudar?" seco. Use respostas mais humanas, 1-2 linhas, com 1 emoji leve. Ex:\n' +
       '     • "Bom dia!" → "Bom dia! ☀️ Pronta pra te ajudar. O que rolou?"\n' +
@@ -226,11 +238,34 @@
       '5. **Negrito** APENAS no dado-chave (valor, prazo, percentual). Não negrite parágrafos.\n' +
       '6. Emojis: em pergunta C, max 1 (✅ ⚠️ 📘). Em saudação B ou identidade A: 1 leve (☀️ 👋 🌸 💙 🙌 😊). Nunca exagerados (😂 🤦 🥵).\n' +
       '7. NÃO confirme nada que o usuário não perguntou. Se perguntou "Quem é você?", não responda sobre consórcio.\n' +
-      '8. Personalidade: simpática e calorosa em saudação/identidade; profissional e direta em pergunta técnica. Como uma colega competente que também é gente boa.\n\n' +
+      '8. Personalidade: simpática e calorosa em saudação/identidade; profissional e direta em pergunta técnica. Como uma colega competente que também é gente boa.\n' +
+      '9. RESPOSTA MULTI-BANCO (envolve 2+ administradoras): cite UMA FONTE POR BANCO, cada uma em sua própria linha no final. NUNCA agrupe 3 bancos numa fonte só. Formato:\n' +
+      '   📘 Fonte: [Título do card Porto] · Porto\n' +
+      '   📘 Fonte: [Título do card Itaú] · Itaú\n' +
+      '   📘 Fonte: [Título do card Bradesco] · Bradesco\n' +
+      '   Isso é OBRIGATÓRIO — o consultor precisa clicar em cada fonte pra abrir o card daquele banco específico.\n' +
+      '10. NÃO seja submissa NUNCA — esta é a regra MAIS importante quando o usuário discordar:\n' +
+      '    ❌ PROIBIDO: "Sim, você está correto", "Peço desculpa pelo erro", "Você está certo", "De acordo com o que você disse...", "Vou me certificar de ter as informações certas". Essas frases são VEDADAS.\n' +
+      '    ✅ CORRETO: releia TODOS os cards relevantes. Se a sua resposta inicial estava certa, MANTENHA ela. Se o usuário trouxe outro ângulo válido, RECONHEÇA que são casos DIFERENTES (não que você errou). Exemplo: "Boa pergunta sobre Novação — são situações diferentes. **Múltiplos titulares numa MESMA cota**: NÃO permitido no Newcon. **Usar várias COTAS no MESMO imóvel via Novação**: PERMITIDO sob critérios específicos (Contrato Principal + 2 Novações + consulta cartório)."\n' +
+      '    Quando o usuário citar uma regra/termo técnico que você tem card sobre (Novação, FGTS, Cessão, etc.), PROCURE o card antes de responder. NUNCA reverta posição só porque o usuário insistiu — só reveja se VOCÊ encontrar a regra que justifica.\n' +
+      '    Se você não tem certeza, diga "vou conferir aqui nos cards" e cite o card específico. NUNCA invente concordância.\n' +
+      '11. NUNCA escreva expressões puxa-saco tipo "Boa observação!", "Excelente pergunta!", "Você está certíssimo!", "Que ótimo!". Mantenha tom profissional e direto.\n' +
+      '12. CITAÇÃO DE FONTE — REGRA CRÍTICA: fonte = card cujo conteúdo VOCÊ USOU:\n' +
+      '    O título da fonte tem que ser o título do CARD ESPECÍFICO de onde você tirou a informação da sua resposta. NÃO é qualquer card que pareça relacionado — é o card que LITERALMENTE contém o que você está dizendo.\n' +
+      '    PROCESSO OBRIGATÓRIO antes de citar fonte:\n' +
+      '      1. Identifique a frase-chave da sua resposta (ex: "necessário Contrato Principal + 2 Contratos de Novação").\n' +
+      '      2. ENCONTRE o card abaixo em [CARD N · Banco · Categoria] cujo conteúdo TEM essa frase ou conceito.\n' +
+      '      3. Cite EXATAMENTE o título daquele card + banco.\n' +
+      '    ❌ ERRO GRAVE comum: citar um card de OUTRO banco ou OUTRO assunto só porque é o último que você "lembra". Se você responde sobre Porto Novação, a fonte É um card Porto sobre Novação — NUNCA um card Itaú/Bradesco de outro assunto.\n' +
+      '    ❌ ERRO: citar nome de CATEGORIA ("Bradesco · Canais e contatos", "Itaú · Pagamentos"). Categoria não é fonte.\n' +
+      '    ✅ CERTO: "📘 Fonte: Contrato de Novação Porto — adicionar mais cotas a um processo de imóvel já iniciado · Porto"\n' +
+      '    ✅ CERTO: "📘 Fonte: Lista completa de telefones e canais Bradesco Consórcios · Bradesco"\n' +
+      '    CONTINUIDADE DE DIÁLOGO: se você já respondeu na pergunta anterior usando o card X, e agora está explicando o MESMO assunto de novo (ex: usuário discordou), cite o MESMO card X de novo. NÃO mude de card a cada turno se o assunto é o mesmo.\n' +
+      '    Formato fixo: "📘 Fonte: [Título exato do card] · [Nome do Banco]". Se NÃO houver card específico cobrindo o assunto, NÃO invente fonte — diga "Não tenho card específico, vou conferir."\n\n' +
       'EXEMPLOS DE RESPOSTA CERTA:\n' +
       '─ "Bom dia Maia" → "Bom dia! ☀️ Pronta pra te ajudar. O que rolou?"\n' +
       '─ "Tudo bem?" → "Tudo ótimo por aqui! E você, tá tranquilo? 🙌"\n' +
-      '─ "Quem é você?" → "Sou a MAIA — MAster Prime + Inteligência Artificial 🌸 Tô aqui pra tirar dúvidas sobre Porto, Itaú, Bradesco, FGTS Caixa e Comissões. Pode mandar a pergunta!"\n' +
+      '─ "Quem é você?" / "Por que o nome Maia?" → "Sou a Maia! 🌸 Meu nome é uma sigla: **MA** de **Master** Prime + **IA** de **Inteligência Artificial** = Maia. Tô aqui pra tirar dúvidas sobre Porto, Itaú, Bradesco, FGTS Caixa e Comissões. Pode mandar a pergunta!"\n' +
       '─ "Carro usado na Porto?" → "Até **8 anos** de fabricação, contando o ano vigente. 📘 Fonte: O que dá para comprar com a carta de bens móveis · Porto"\n' +
       '─ "Bradesco aceita FGTS?" → "Sim — só pra imóvel, na quitação ou nos lances. 📘 Fonte: FGTS no consórcio Bradesco · Bradesco"\n' +
       '─ "Como é a sobra de crédito no Itaú?" → "**10% do crédito** disponível pra despesas relacionadas (IPVA, licenciamento, seguro). Prazo: **30 dias** após o faturamento. 📘 Fonte: O cliente pode usar a sobra de crédito · Itaú"\n' +
@@ -382,7 +417,30 @@
       }
       var sourcesHtml = '';
       if (m.sources && m.sources.length) {
+        // Bancos conhecidos pra detectar inversão de ordem na fonte citada
+        var BANCOS_REGEX = /^(porto|porto bank|porto seguro|ita[uú]|bradesco|fgts|fgts caixa|caixa|comiss[oõ]es)$/i;
         sourcesHtml = '<div class="kbc-sources">' + m.sources.map(function (s) {
+          // Source ideal: "Título · Banco" (ou "Título · Banco · Categoria")
+          // Mas a Maia às vezes inverte e escreve "Banco · Categoria/Título"
+          var parts = String(s).split('·').map(function (x) { return x.trim(); });
+          var titulo = parts[0] || '';
+          var banco = parts[1] || '';
+          // Se o primeiro elemento parecer um banco, inverte: o título tá no 2º (ou 3º)
+          if (BANCOS_REGEX.test(titulo) && parts.length >= 2) {
+            banco = parts[0];
+            titulo = parts.slice(1).join(' · ');
+          } else if (banco && !BANCOS_REGEX.test(banco) && parts[2] && BANCOS_REGEX.test(parts[2])) {
+            // Caso "Título · Categoria · Banco" — banco vem por último
+            banco = parts[2];
+          }
+          var hasBanco = banco && titulo;
+          if (hasBanco) {
+            return '<button type="button" class="kbc-src kbc-src-link" ' +
+                     'data-titulo="' + esc(titulo) + '" data-adm="' + esc(banco) + '" ' +
+                     'title="Clique para abrir o card no Material de Apoio">' +
+                     '📘 ' + esc(s) +
+                   '</button>';
+          }
           return '<span class="kbc-src">📘 ' + esc(s) + '</span>';
         }).join('') + '</div>';
       }
@@ -408,7 +466,7 @@
     return (
       '<div class="kbc-welcome">' +
         '<div class="kbc-welcome-avatar maia-avatar maia-avatar-lg"></div>' +
-        '<h3>Oi! Eu sou a MAIA 👋</h3>' +
+        '<h3>Oi! Eu sou a Maia 👋</h3>' +
         '<p>Sua assistente da Master Prime. Como posso te ajudar hoje?</p>' +
         '<div class="kbc-examples-label">Posso começar por aqui:</div>' +
         '<div class="kbc-examples">' + ex + '</div>' +
@@ -548,6 +606,20 @@
         if (input) input.value = q;
         send(q);
       }
+    });
+
+    // Delegate: clica em fonte (card citado) → abre direto no Material de Apoio
+    container.addEventListener('click', function (e) {
+      var src = e.target && e.target.closest ? e.target.closest('.kbc-src-link') : null;
+      if (!src) return;
+      e.preventDefault();
+      var titulo = src.getAttribute('data-titulo') || '';
+      var adm = src.getAttribute('data-adm') || '';
+      try {
+        if (typeof window.maiaAbrirCard === 'function') {
+          window.maiaAbrirCard(adm, titulo);
+        }
+      } catch (err) { console.error('[Maia] erro ao abrir card:', err); }
     });
 
     // Foca o input
