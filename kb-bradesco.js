@@ -175,7 +175,7 @@ window.KB_ADMIN["bradesco"] = {
       "categoria_label": "Por que vender consórcio",
       "categoria_ordem": 3,
       "titulo": "Consórcio x financiamento — qual a diferença?",
-      "conteudo": "A diferença central é o custo. Financiamento tem juros, IOF e tarifas; consórcio não tem juros — só a taxa de administração, normalmente bem menor.\n\nNo financiamento o cliente leva o bem na hora, mas paga caro. No consórcio o cliente espera a contemplação (ou antecipa com lance), com um custo bem menor. O portal tem o simulador Consórcio x Financiamento, que mostra a economia em números.",
+      "conteudo": "A diferença central é o custo. Financiamento tem juros, IOF e tarifas; consórcio não tem juros — só a taxa de administração, normalmente bem menor.\n\nNo financiamento o cliente leva o bem na hora, mas paga caro. No consórcio o cliente espera a contemplação (ou antecipa com lance), com um custo bem menor. O portal tem o simulador Consórcio e Financiamento, que mostra a economia em números.",
       "tags": "financiamento, comparação, juros, economia",
       "ordem": 2
     },
@@ -184,7 +184,7 @@ window.KB_ADMIN["bradesco"] = {
       "categoria_label": "Por que vender consórcio",
       "categoria_ordem": 3,
       "titulo": "Consórcio x comprar à vista — faz sentido?",
-      "conteudo": "Faz sentido em muitos casos. Em vez de investir todo o capital de uma vez num bem, o cliente pode programar a compra sem juros e manter o dinheiro rendendo.\n\nNum cenário de juros altos, manter a liquidez investida e comprar via consórcio pode render mais do que descapitalizar para comprar à vista. O portal tem o simulador Consórcio x À Vista para essa conta.",
+      "conteudo": "Faz sentido em muitos casos. Em vez de investir todo o capital de uma vez num bem, o cliente pode programar a compra sem juros e manter o dinheiro rendendo.\n\nNum cenário de juros altos, manter a liquidez investida e comprar via consórcio pode render mais do que descapitalizar para comprar à vista. O portal tem o simulador Consórcio e À Vista para essa conta.",
       "tags": "à vista, comparação, liquidez, investimento",
       "ordem": 3
     },
@@ -193,7 +193,7 @@ window.KB_ADMIN["bradesco"] = {
       "categoria_label": "Por que vender consórcio",
       "categoria_ordem": 3,
       "titulo": "Consórcio serve como investimento e formação de patrimônio?",
-      "conteudo": "Sim — e esse é um dos melhores argumentos. O consórcio é um planejamento para aumentar o patrimônio: com um esforço mensal, o cliente conquista um bem que pode valorizar, gerar renda ou servir de base para o próximo passo.\n\nÉ a chance de conquistar patrimônio sem se descapitalizar. O portal tem os simuladores de Investimento e de Alavancagem Patrimonial para mostrar isso.",
+      "conteudo": "Sim — e esse é um dos melhores argumentos. O consórcio é um planejamento para aumentar o patrimônio: com um esforço mensal, o cliente conquista um bem que pode valorizar, gerar renda ou servir de base para o próximo passo.\n\nÉ a chance de conquistar patrimônio sem se descapitalizar. O portal tem os simuladores Modo Investidor e Construindo Patrimônio para mostrar isso.",
       "tags": "investimento, patrimônio, alavancagem",
       "ordem": 4
     },
@@ -525,9 +525,9 @@ window.KB_ADMIN["bradesco"] = {
       "categoria_key": "credito_auto",
       "categoria_label": "Crédito e compra — Automóvel",
       "categoria_ordem": 8,
-      "titulo": "O que dá para comprar — enquadramento dos veículos?",
+      "titulo": "O que dá para comprar com a carta de bens móveis?",
       "conteudo": "• Motos: qualquer marca/modelo com chassi alienável — a partir de 300 cc só 0 km; 400 cc até 3 anos; 600 cc até 5 anos.\n• Carros, utilitários e caminhonetes: qualquer marca/modelo, até 10 anos de uso, sem alienação e sem chassi remarcado.\n• Caminhões e ônibus: até 10 anos de uso, sem alienação e sem chassi remarcado.\n• Semirreboques, tratores, máquinas, implementos agrícolas, aeronaves e embarcações: regras específicas (alguns só 0 km, alguns mediante aprovação em comitê).\n\nPara embarcações, aeronaves, máquinas agrícolas e equipamentos, consulte o promotor.",
-      "tags": "enquadramento, veículo, moto, idade, regras",
+      "tags": "enquadramento, veículo, moto, carro, caminhonete, bens móveis, carta, idade, regras, comprar",
       "ordem": 2
     },
     {
@@ -562,8 +562,8 @@ window.KB_ADMIN["bradesco"] = {
       "categoria_label": "Crédito e compra — Automóvel",
       "categoria_ordem": 8,
       "titulo": "O cliente pode usar a sobra de crédito para despesas?",
-      "conteudo": "Sim. Havendo sobra de crédito, o cliente pode usar até 10% para reembolso de despesas — IPVA, licenciamento, transferência de propriedade, registros de cartório, acessórios e também a contratação do Seguro Bradesco.\n\nO reembolso é feito pela BPO de contratação, que pede a documentação específica. Se o cliente não usar a sobra para isso, ela quita parcelas do saldo devedor na ordem inversa.",
-      "tags": "10%, sobra de crédito, despesas, seguro, ipva",
+      "conteudo": "Sim. Havendo sobra de crédito, o cliente pode usar até 10% do valor do crédito liberado para reembolso de despesas — IPVA, licenciamento, transferência de propriedade, registros de cartório, acessórios e também a contratação do Seguro Bradesco.\n\nComo funciona o reembolso:\n• O pagamento é feito por reembolso pela BPO de contratação, mediante apresentação da documentação dos custos.\n• Prazo para solicitar: até 30 dias após o faturamento do veículo.\n• Se o cliente não usar a sobra para essas despesas (ou se sobrar algum valor depois), o saldo é automaticamente abatido do saldo devedor — amortizando as parcelas na ordem inversa.",
+      "tags": "10%, sobra de crédito, despesas, seguro, ipva, 30 dias, reembolso, bpo",
       "ordem": 6
     },
     {
@@ -840,6 +840,15 @@ window.KB_ADMIN["bradesco"] = {
       "categoria_key": "seguro",
       "categoria_label": "Seguro prestamista",
       "categoria_ordem": 12,
+      "titulo": "Quanto custa o seguro prestamista Bradesco? (coeficientes por tipo de bem)",
+      "conteudo": "O coeficiente do seguro prestamista Bradesco varia conforme o tipo de bem:\n\n• Imóvel: 0,043% ao mês (alíquota fixa).\n• Pesados: 0,065% ao mês (alíquota fixa).\n• Veículos leves (auto/moto): varia entre 0,0562% e 0,0598% ao mês — depende do grupo e do perfil do consorciado.\n\nO valor incide sobre o saldo devedor / valor da cota + taxas e é cobrado mensalmente junto da parcela. O seguro é opcional na adesão.\n\nReferência rápida pra comparar com outras administradoras:\n• Porto: 0,038% (alíquota única).\n• Itaú: Imóvel 0,047% · Veículos 0,056% · Moto 0,084%.\n• Bradesco: Imóvel 0,043% · Pesados 0,065% · Leves 0,0562%–0,0598%.\n\nValores indicativos — confirmar no contrato/proposta do grupo específico do cliente.",
+      "tags": "seguro, valor, custo, coeficiente, alíquota, 0,043, 0,065, 0,0562, 0,0598, imóvel, pesados, veículos leves, mensal, comparativo, porto, itaú",
+      "ordem": 5
+    },
+    {
+      "categoria_key": "seguro",
+      "categoria_label": "Seguro prestamista",
+      "categoria_ordem": 12,
       "titulo": "Vale a pena oferecer o seguro ao cliente?",
       "conteudo": "Vale sempre apresentar. Por um pequeno adicional na parcela, o cliente protege um plano de vários anos.\n\nO jeito certo de oferecer é como parte do planejamento, não como um custo extra: \"por um valor pequeno, seu plano fica protegido até o fim, para você e para a sua família\".",
       "tags": "seguro, vale a pena, oferecer, argumento",
@@ -1105,14 +1114,144 @@ window.KB_ADMIN["bradesco"] = {
       "conteudo": "O monitoramento do Bradesco pede atualização cadastral periódica. A lista varia por perfil:\n\nPessoa Física:\n\n• Documento de identificação pessoal (CNH ou RG).\n• Comprovante de endereço em nome do cliente, emissão de até 180 dias. Aceita contas de consumo (água, luz, gás, internet, telefone), IPTU, IPVA, extratos do FGTS, multas de trânsito, licenciamento de veículo, boletos de financiamento imobiliário, mensalidade escolar, fatura de plano de saúde, correspondências bancárias e oficiais. Se o cliente for morador recente, aceita contrato de aluguel, compra e venda ou financiamento de imóvel, desde que registrado em cartório.\n• Comprovante de renda: 3 últimos holerites ou Declaração de Imposto de Renda.\n• Autorização de consulta ao SIBA: formulário 4335-032E.\n\nPessoa Jurídica:\n\n• Identificação pessoal dos responsáveis legais (CNH ou RG).\n• Comprovante de endereço (mesmas regras da PF).\n• Comprovante de faturamento dos últimos 12 meses, preenchido e assinado, com número do CRC do contador.\n• Documento de constituição: contrato social + última alteração.\n• Autorização de consulta ao SIBA: formulário 4335-032E.\n\nProdutor Rural:\n\n• Identificação pessoal (CNH ou RG).\n• Comprovante de endereço (mesmas regras da PF).\n• Comprovante de renda: Declaração de Imposto de Renda.\n• Autorização de consulta ao SIBA: formulário 4335-032E.\n• Cadastro Agro: se o cliente não for correntista, informar para apoio da análise — ficha sanitária, experiência na atividade, tipo de agricultura (soja, milho, algodão, pecuária, etc.) e, no caso de pecuária, etapas trabalhadas (cria, recria, engorda, confinamento).\n\nA lista completa em PDF está disponível na seção 'Materiais para baixar' aqui no Material de Apoio.",
       "tags": "monitoramento, atualização cadastral, documentos, checklist, SIBA, comprovante de renda, comprovante de endereço, PF, PJ, produtor rural, agro",
       "ordem": 7
+    },
+    {
+      "categoria_key": "credito_veiculos",
+      "categoria_label": "Carta de crédito — Veículos",
+      "categoria_ordem": 6,
+      "titulo": "Como funciona a Linha Amarela (tratores e máquinas) no Bradesco?",
+      "conteudo": "A Linha Amarela do Bradesco cobre tratores, colheitadeiras, pá-carregadeira e retroescavadeiras, nacionais ou importadas. As regras mudam por estado do bem:\n\nZero (0km):\n• Vendido pela fábrica ou revendedora autorizada.\n• Valor do bem precisa ser superior ao saldo devedor.\n• Análise de crédito aprovada.\n• Não paga bens inacabados ou em fase de montagem — só depois de finalizado, com nota fiscal de venda.\n• Cota contemplada com crédito disponível, parcelas em dia, dados cadastrais atualizados (PSDC e NPCO).\n\nUsado:\n• Até 8 anos de fabricação.\n• Vendido pelo proprietário, conforme nota fiscal.\n• Vistoria aprovada.\n• Valor superior ao saldo devedor + análise de crédito aprovada + crédito disponível + parcelas em dia + cadastro atualizado.\n\nImportado:\n• Sem trading (importação direta pelo consorciado): precisa de autorização prévia da Bradesco Consórcios. Além do contrato e nota promissória, envia contrato de câmbio e cópia da DI (Declaração de Importação validada pela Receita).\n• Com trading: tudo do item anterior + nota fiscal.\n• Reembolso: só para pagamentos feitos ao fornecedor DEPOIS da contemplação. Se o cliente antecipar antes da contemplação, NÃO pode usar a cota para reembolso.\n• Imposto de Importação: aceito desde que descrito em nota fiscal e incluído no valor total. Pode usar até 10% da carta para reembolso de armazenagem, capatazias, despachantes, taxas e impostos do serviço de importação.",
+      "tags": "linha amarela, trator, colheitadeira, pá-carregadeira, retroescavadeira, máquina pesada, agro, zero, usado, importado, trading, DI, declaração de importação, vistoria, 8 anos",
+      "ordem": 10
+    },
+    {
+      "categoria_key": "credito_veiculos",
+      "categoria_label": "Carta de crédito — Veículos",
+      "categoria_ordem": 6,
+      "titulo": "Como funciona a aquisição de veículo blindado no Bradesco?",
+      "conteudo": "O Bradesco trata blindagem de 3 formas:\n\nVeículo 0km que ainda será blindado:\n• Paga o valor total da nota fiscal de venda dos produtos para a blindagem.\n• Solicitação enviada para a Funchal, com a NF + dados bancários do emissor da NF (para crédito).\n• Atenção: se a blindagem for paga junto com a garantia principal, o risco em caso de desistência da aquisição do bem é do cliente.\n\nVeículo usado já blindado:\n• A blindagem precisa constar no DUT, CRV ou CRLV do veículo para o pagamento ser considerado acima da tabela Fipe/Molicar.\n• Enviar junto com o processo de pagamento (via NPCO) as consultas do Webmotors de veículos semelhantes considerando a blindagem — para comprovar o valor superior à Fipe.\n\nVeículo usado com blindagem posterior ao pagamento principal:\n• Considera até 10% do crédito para pagamento da NF de venda dos produtos + NF de serviços de blindagem.\n• Solicitação para a Funchal, com NFs + dados bancários do emissor.\n• Havendo várias NFs, os 10% são compartilhados entre elas. Se houver mais de um emissor, a agência discrimina quanto cada favorecido recebe.",
+      "tags": "blindagem, blindado, veículo blindado, zero blindado, usado blindado, fipe, molicar, dut, crv, crlv, webmotors, funchal, 10%, npco",
+      "ordem": 11
+    },
+    {
+      "categoria_key": "credito_imovel",
+      "categoria_label": "Crédito e compra — Imóvel",
+      "categoria_ordem": 7,
+      "titulo": "Quais são as 16+ modalidades de uso da carta de imóvel Bradesco?",
+      "conteudo": "A carta de crédito imobiliária Bradesco pode ser usada em mais de 16 modalidades — muito mais flexível do que o cliente imagina:\n\n1. Compra simples — imóvel quitado e sem dívidas.\n2. Compra simples com FGTS.\n3. Compra de imóvel financiado em outra instituição (Bradesco quita o financiamento — valor a quitar deve ser menor que a carta).\n4. Compra com cota quitada (quem terminou de pagar e vai usar agora).\n5. Reforma sem ampliação.\n6. Reforma com ampliação.\n7. Construção.\n8. Silos agrícolas.\n9. Retrofit (implantar, modernizar ou reformar franquias).\n10. Compra com construção (terreno + construção em projeto único).\n11. Compra com reforma (compra + reforma em projeto único).\n12. Quitação de financiamento em nome próprio (valor a quitar menor que a carta).\n13. Reembolso (comprou com recursos próprios pós-contemplação e quer ressarcimento).\n14. Garantia para compra à vista — comprou à vista e oferece outro imóvel como garantia.\n15. Garantia para compra à vista de imóvel na planta.\n16. Transferência — cota + imóvel adquirido para outra pessoa (imóvel segue alienado ao Bradesco).\n17. Substituição do imóvel de garantia — trocar o imóvel-garantia por outro (em nome do cliente, sem dívidas, valor maior que saldo devedor).\n\nDá pra usar uma mesma carta pra comprar mais de um imóvel. Em quase todas, é necessário deixar um imóvel como garantia (exceto se a cota já estiver quitada).",
+      "tags": "modalidades, uso da carta, imóvel, opções, transferência, substituição garantia, retrofit, silos, construção, reforma, quitação financiamento, reembolso, garantia",
+      "ordem": 12
+    },
+    {
+      "categoria_key": "contemplacao",
+      "categoria_label": "Contemplação",
+      "categoria_ordem": 4,
+      "titulo": "7 passos pra comprar veículo após contemplação Bradesco",
+      "conteudo": "A compra do veículo após contemplação segue 7 etapas — só começa depois que a carta é contemplada:\n\n1. Escolha do veículo — cliente define modelo, ano, vendedor.\n2. Análise de crédito — feita em até 1 dia útil se documentação completa.\n3. Vistoria — somente para usados (on-line por SMS ou presencial em casos específicos).\n4. Autorização de faturamento — emitida pela agência ou via portal.\n5. Documento de transferência (DUT/ATPV) — emitido pelo vendedor com alienação ao Bradesco Consórcios; firma reconhecida.\n6. Contrato de alienação — assinado pelo cliente e pela administradora.\n7. Pagamento do veículo — Bradesco paga em até 3 dias úteis após documentação completa (até 8 dias úteis em casos específicos).\n\nSe contratou via parceiro (corretora), o fluxo é praticamente o mesmo, mas o pedido de compra e demais documentos são digitalizados pelo Portal de Relacionamento, e a assinatura do contrato é eletrônica (link por e-mail).",
+      "tags": "etapas, 7 passos, passo a passo, contemplado, veículo, processo, alienação, dut, atpv, vistoria, prazo, 3 dias úteis, 8 dias úteis",
+      "ordem": 12
+    },
+    {
+      "categoria_key": "credito_auto",
+      "categoria_label": "Crédito e compra — Automóvel",
+      "categoria_ordem": 6,
+      "titulo": "Como funciona o pagamento de veículo usado Bradesco (Fipe/Molicar)?",
+      "conteudo": "Para veículos novos, o pagamento é o valor da nota fiscal, limitado ao crédito.\n\nPara veículos usados, o Bradesco paga o MENOR valor entre 3 referências:\n• Tabela Fipe;\n• Tabela Molicar;\n• Valor de venda da loja, concessionária ou vendedor particular.\n\nExemplo 1: Fipe/Molicar = R$ 50 mil, negociado por R$ 45 mil → paga R$ 45 mil (menor entre os 3).\nExemplo 2: Fipe/Molicar = R$ 50 mil, vendedor cobra R$ 60 mil → paga até R$ 50 mil; o restante (R$ 10 mil) o cliente complementa com recursos próprios.\n\nA vistoria do usado pode ser on-line (link por SMS pro vendedor) ou presencial em veículos específicos, agendada pelo gerente.\n\nPara bens não alienáveis (aeronaves, embarcações usadas), a vistoria NÃO pode ser paga com saldo da carta — é paga direto ao vistoriador credenciado por boleto ou débito em conta.",
+      "tags": "usado, fipe, molicar, vistoria, valor de pagamento, menor valor, limite, recursos próprios, complementação, aeronave, embarcação",
+      "ordem": 12
+    },
+    {
+      "categoria_key": "contemplacao",
+      "categoria_label": "Contemplação",
+      "categoria_ordem": 4,
+      "titulo": "Como funciona o reembolso de despesas com a carta de crédito Bradesco?",
+      "conteudo": "O reembolso permite que o cliente use parte da carta pra cobrir gastos que ele já pagou com recursos próprios. Os limites variam pelo tipo de bem:\n\n• Veículos (alienáveis): até 10% da carta pra contratar Seguro Bradesco em condições especiais, ou pra reembolsar IPVA, seguro e acessórios (quando o veículo escolhido é menor que a carta).\n\n• Imóveis: até 10% da carta para reembolso de cartório e ITBI, + 10% para móveis planejados (totalizando até 20%).\n\n• Bens não alienáveis (jet ski, motorhome, máquinas, aeronaves etc.): até 10% da carta para despesas com cartório.\n\nPara reembolsar gasto já feito, o cliente leva à agência:\n• Comprovante de pagamento (extrato, transferência etc.).\n• Carta do fornecedor autorizando o pagamento (papel timbrado se PJ, simples se PF).",
+      "tags": "reembolso, sobra de crédito, despesas, cartório, acessórios, móveis planejados, 10%, 20%, itbi, ipva, seguro, bens não alienáveis",
+      "ordem": 13
+    },
+    {
+      "categoria_key": "credito_imovel",
+      "categoria_label": "Crédito e compra — Imóvel",
+      "categoria_ordem": 7,
+      "titulo": "O que NÃO é permitido comprar com a carta Bradesco?",
+      "conteudo": "Restrições gerais válidas para imóveis e veículos:\n\n• NÃO é permitido comprar de cônjuge nem de sócios da mesma empresa.\n• Parcelas precisam estar em dia no momento da compra.\n• Nota fiscal e DUT precisam estar em nome da loja/concessionária/vendedor particular conforme propriedade no Detran — se o veículo já foi transferido pra alguém antes, não dá pra faturar.\n• Pagamento sempre vai pra quem consta como dono na matrícula (no caso de imóvel). Em construção ou reforma, o pagamento é feito ao próprio consorciado.\n• Se a carta foi pra imóvel, NÃO dá pra comprar terreno isolado — terreno só faz sentido dentro da modalidade 'compra com construção'.\n• Bens não alienáveis (embarcações usadas, aeronaves) têm exigências adicionais: laudo de vistoria, apólice de seguro com cláusula beneficiária ao Bradesco, registro na capitania dos portos ou ANAC.",
+      "tags": "restrições, vedações, não permitido, cônjuge, sócios, terreno isolado, em dia, beneficiária bradesco",
+      "ordem": 13
+    },
+    {
+      "categoria_key": "pagamentos",
+      "categoria_label": "Pagamentos e parcelas",
+      "categoria_ordem": 4,
+      "titulo": "Como funciona a amortização ou liquidação do saldo devedor com FGTS Bradesco?",
+      "conteudo": "O FGTS pode ser usado em 3 momentos diferentes no consórcio de imóvel, DEPOIS da contemplação e aquisição:\n\n1. Amortização parcial do saldo devedor — intervalo mínimo de 2 anos entre cada movimentação; parcelas precisam estar em dia.\n2. Liquidação total do saldo devedor — admite parcelas em atraso (mas se estiver em cobrança, antes precisa quitar custas e honorários).\n3. Pagamento de parte da prestação — intervalo mínimo de 1 ano; limite de 80% do valor da parcela; saque único debitado nas próximas 12 parcelas; cota não pode ter mais de 3 parcelas em atraso.\n\nSó funciona se a carta foi usada para IMÓVEL RESIDENCIAL URBANO. Não dá pra imóvel comercial, terreno, lazer, reforma, construção ou quitação de financiamento.\n\nRequisitos do trabalhador:\n• Mínimo de 3 anos de FGTS.\n• Não pode ser proprietário de outro imóvel na mesma região metropolitana.\n• Não pode ter financiamento ativo no SFH.\n\nATENÇÃO ao INCC: para evitar reajuste do saldo devedor, o crédito do FGTS precisa ser liberado ANTES da assembleia que antecede o mês de reajuste do INCC. Se a cota está em mês de reajuste e quer liquidar, é necessário aguardar o reajuste primeiro.",
+      "tags": "fgts, amortização, liquidação, saldo devedor, parcela, incc, 2 anos, 1 ano, 80%, residencial urbano, 3 anos fgts, sfh",
+      "ordem": 11
+    },
+    {
+      "categoria_key": "pagamentos",
+      "categoria_label": "Pagamentos e parcelas",
+      "categoria_ordem": 4,
+      "titulo": "Quais documentos pedir pra amortização/liquidação com FGTS?",
+      "conteudo": "Check-list base (consorciado titular):\n• Contrato de Compra e Venda registrado no Cartório de Registro de Imóveis.\n• Contrato de Cessão de Direitos registrado (se adquirido por essa modalidade).\n• Extrato do FGTS original e atualizado (papel timbrado ou carimbo da Caixa).\n• Formulário 6565-061E — Autorização para Movimentação de Conta Vinculada do FGTS (preenchido EXCETO o campo 'valor do saque', assinado, com firma reconhecida ou abonado na agência).\n• Declaração completa do IR atual protocolada na Receita Federal (se isento, modelo 6565-076E).\n\nSe houver coobrigado (cônjuge que adquiriu junto ou sob comunhão de bens), some:\n• IR da época da contratação do imóvel (do coobrigado).\n• Cópia da carteira de trabalho (folhas de foto, identificação, contrato e opção do FGTS).\n• Comprovante de endereço atual + da época da contratação.\n• Formulário 6565-068E (Aditamento — se cota já tem seguro) + 6565-070E (Adesão ao Seguro Prestamista).\n• OU Formulário 6565-069E (Aditamento — se cota NÃO tem seguro).\n\nDocumentos vão direto pra Agência de Relacionamento. Originais devem ser apresentados a qualquer tempo se a Caixa pedir.",
+      "tags": "documentos, fgts, check-list, formulários, 6565-061E, 6565-068E, 6565-069E, 6565-070E, 6565-076E, coobrigado, cônjuge, ir, carteira de trabalho",
+      "ordem": 12
+    },
+    {
+      "categoria_key": "lance",
+      "categoria_label": "Lance",
+      "categoria_ordem": 8,
+      "titulo": "Como funciona o lance embutido no consórcio de imóvel Bradesco (até 30%)?",
+      "conteudo": "O lance embutido permite ofertar lance SEM ter o dinheiro à vista — usando até 30% da própria carta de crédito de imóvel.\n\nComo funciona: o cliente escolhe o valor (até 30% da carta), esse valor entra como lance na assembleia; se contemplado, o valor é DESCONTADO do crédito disponível.\n\nExemplo: carta de R$ 200 mil + lance embutido de R$ 60 mil → cliente fica com R$ 140 mil pra comprar o imóvel.\n\nPontos de atenção que o consultor PRECISA explicar:\n• A taxa de administração CONTINUA sobre o valor total da carta contratada (não muda).\n• O cliente reduz o crédito disponível pro imóvel.\n• Não garante contemplação — só aumenta as chances.\n• Pode ser combinado com lance próprio (recurso do bolso) pra chegar a um percentual mais competitivo.\n\nImportante: a simulação, contratação e oferta do lance embutido são feitas COM APOIO DO GERENTE — não fica disponível nos canais de autoatendimento.",
+      "tags": "lance embutido, imóvel, 30%, antecipar contemplação, valor reduzido, exemplo, gerente, taxa adm",
+      "ordem": 12
+    },
+    {
+      "categoria_key": "credito_imovel",
+      "categoria_label": "Crédito e compra — Imóvel",
+      "categoria_ordem": 7,
+      "titulo": "Quais são as regras de construção e reforma com a carta Bradesco?",
+      "conteudo": "Regras práticas para usar a carta em obra própria:\n\nCONSTRUÇÃO:\n• Prazo limite: 24 meses (conforme cronograma físico-financeiro).\n• Cronograma elaborado por engenheiro responsável + documentação aprovada pelos órgãos competentes.\n• Matrícula do imóvel livre de ônus, com infraestrutura concluída (água, esgoto, energia, acessos).\n• Obra SUPERVISIONADA por engenheiro credenciado pelo Banco Bradesco.\n• Pagamento liberado em parcelas conforme o cronograma. Se há atraso na obra, a parcela seguinte FICA BLOQUEADA até a etapa anterior ser cumprida.\n• Última parcela só é liberada com AVERBAÇÃO da construção na matrícula.\n\nREFORMA:\n• Prazo limite: 18 meses.\n• Documentação aprovada + engenheiro responsável credenciado.\n• Crédito LIMITADO a 50% do valor de avaliação do imóvel.\n\nEm ambos os casos, durante a construção/reforma a garantia é o imóvel onde a obra está sendo feita.",
+      "tags": "construção, reforma, prazo, 24 meses, 18 meses, engenheiro, cronograma, garantia evolutiva, averbação, 50% avaliação, supervisão",
+      "ordem": 14
+    },
+    {
+      "categoria_key": "saida",
+      "categoria_label": "Transferência e saída do grupo",
+      "categoria_ordem": 11,
+      "titulo": "Tabela oficial de tarifas Bradesco Consórcios (Folheto vigente)",
+      "conteudo": "Valores úteis pra apresentar custos ao cliente (Folheto PF, atualização 06.2026):\n\n• 2ª via de documentos: R$ 50,00 por documento.\n• Avaliação de bens móveis usados: R$ 650,00. Novos: R$ 280,00. Não alienáveis: R$ 500,00.\n• Avaliação imóvel residencial / terreno até 5.000m²: até R$ 1.069,00.\n• Avaliação imóvel comercial / terreno acima de 5.000m²: até R$ 3.500,00.\n• Elaboração de instrumento particular + análise jurídica (aquisição, construção ou reforma): R$ 2.791,00 por contrato.\n• Tarifa de avaliação avulsa — término de construção/reforma residencial: até R$ 800,00. Comercial: até R$ 2.251,33.\n• Transferência de bens móveis: 1% do bem de referência atualizado, mínimo R$ 800,00.\n• Transferência de bens imóveis: 1% do saldo devedor, mínimo R$ 750,00.\n• Cessão de bens móveis ou imóveis: 1% do saldo devedor, mínimo R$ 750,00.\n• Substituição de garantia (móvel): 1% sobre bem de referência, mínimo R$ 800,00.\n• Substituição de garantia (imóvel): 1% do saldo devedor, mínimo R$ 1.145,00.\n\nValores podem ser reajustados com 30 dias de aviso. Confirmação sempre no Folheto vigente.",
+      "tags": "tarifas, valores, transferência, cessão, substituição garantia, avaliação, 2ª via, R$ 1.069, R$ 2.791, R$ 800, R$ 750, R$ 1.145, móveis, imóveis",
+      "ordem": 7
+    },
+    {
+      "categoria_key": "credito_auto",
+      "categoria_label": "Crédito e compra — Automóvel",
+      "categoria_ordem": 6,
+      "titulo": "Quais documentos pedir do vendedor para faturar o veículo (Bradesco)?",
+      "conteudo": "Para o Bradesco pagar o veículo, a documentação do VENDEDOR precisa estar redondinha. O que conferir antes de mandar pra agência/portal:\n\nVEÍCULO 0KM:\n• Pedido de compra (formaliza condições da venda).\n• Nota fiscal COM alienação à Bradesco Consórcios (em nome da concessionária autorizada).\n\nVEÍCULO USADO:\n• Pedido de compra.\n• DUT/ATPV preenchido e assinado pelo vendedor, COM FIRMA RECONHECIDA.\n• DUT/NF precisam estar em nome da loja, concessionária ou vendedor particular CONFORME PROPRIEDADE NO DETRAN — se o veículo já foi transferido pra alguém antes, não dá pra faturar.\n• Em alternativa, aceita-se Nota Fiscal de Venda para usados, desde que o veículo esteja em nome da loja no Detran.\n\nBENS NÃO ALIENÁVEIS (aeronaves, embarcações): somam apólice de seguro com cláusula beneficiária ao Bradesco, registro na capitania dos portos ou ANAC, laudo de vistoria, certificado de aeronavegabilidade (aeronave) e nota promissória registrada na ANAC.\n\nLembrete operacional: o registro do contrato de alienação em cartório deve ser feito NA COMARCA DO COMPRADOR.",
+      "tags": "vendedor, faturamento, nota fiscal, dut, atpv, documentos, firma reconhecida, detran, comarca do comprador, alienação, bens não alienáveis",
+      "ordem": 13
+    },
+    {
+      "categoria_key": "plataforma_corretor",
+      "categoria_label": "Plataforma do corretor",
+      "categoria_ordem": 14,
+      "titulo": "Fluxo do contemplado quando o consórcio foi vendido via parceiro/corretora",
+      "conteudo": "Quando o cliente comprou via parceiro (corretora), o fluxo de pós-contemplação NÃO passa pela agência — é todo via Portal de Relacionamento:\n\n1. Acesso ao portal — cliente cadastra login e senha.\n2. Indicação do bem — escolhe veículo/imóvel e indica no portal.\n3. Análise de crédito — Bradesco analisa os documentos digitalizados (até 1 dia útil).\n4. Vistoria — para veículos usados, link por SMS pro vendedor fazer on-line.\n5. Autorização de faturamento — emitida e enviada ao vendedor pela Bradesco.\n6. Faturamento — cliente digitaliza nota fiscal ou DUT no portal.\n7. Emissão e assinatura eletrônica — Bradesco envia contrato por e-mail; cliente assina eletronicamente.\n8. Liberação do crédito — pagamento em até 3 dias úteis após docs analisadas.\n\nO consultor deve ORIENTAR O CLIENTE A FAZER O CADASTRO NO PORTAL LOGO QUE FOR CONTEMPLADO — isso evita atraso de 2-3 dias no início do processo. Tudo que é assinatura é eletrônica, o que acelera muito frente ao fluxo de agência.",
+      "tags": "parceiro, portal de relacionamento, fluxo, contemplado, assinatura eletrônica, 8 passos, 1 dia útil, 3 dias úteis, corretora, sem agência",
+      "ordem": 5
+    },
+    {
+      "categoria_key": "canais",
+      "categoria_label": "Canais e contatos",
+      "categoria_ordem": 11,
+      "titulo": "Lista completa de telefones e canais Bradesco Consórcios",
+      "conteudo": "Central do Consorciado:\n• 4004 4436 (capitais e regiões metropolitanas).\n• 0800 722 4436 (demais regiões).\n• Eletrônico 24h; personalizado seg-sex, 8h-20h.\n\nFone Fácil Bradesco (banco): 4002 0022 / 0800 570 0022 — 24/7 para consultas e transações.\n\nSAC — Alô Bradesco: 0800 704 8383 — 24/7 — reclamações, cancelamentos e informações gerais.\n\nSAC — Deficiência Auditiva ou de Fala: 0800 722 0099 — 24/7.\n\nOuvidoria: 0800 727 9933 — seg-sex 9h-18h. Usar se o SAC não resolveu.\n\nSeguro Auto Bradesco (pra carta usar até 10% no seguro): 4004 2727 / 0800 701 2727 — seg-sex 7h40-20h20, sábado 8h-14h.\n\nBIA (assistente virtual): banco.bradesco/consorcios.",
+      "tags": "telefones, central, sac, ouvidoria, bia, seguro auto, 4004 4436, 0800 722 4436, 4002 0022, 0800 704 8383, deficiência auditiva, canais",
+      "ordem": 4
     }
   ],
   "downloads": [
-    {
-      "titulo": "Guia do Contemplado — Automóvel",
-      "descricao": "Passo a passo da compra do veículo depois da contemplação. Ótimo para enviar ao cliente recém-contemplado.",
-      "arquivo": "kb-guia-contemplado-auto.pdf"
-    },
     {
       "titulo": "1º acesso ao Canal do Consorciado",
       "descricao": "Guia passo a passo de como o cliente faz o primeiro acesso e cria a senha do Canal do Consorciado.",
@@ -1132,6 +1271,51 @@ window.KB_ADMIN["bradesco"] = {
       "titulo": "Checklist — Atualização Cadastral (Monitoramento)",
       "descricao": "Documentos necessários na atualização cadastral periódica do Bradesco, separados por perfil: Pessoa Física, Pessoa Jurídica e Produtor Rural.",
       "arquivo": "kb-bradesco-atualizacao-cadastral.pdf"
+    },
+    {
+      "titulo": "Manual do Parceiro Bradesco (Out/2024)",
+      "descricao": "Manual oficial completo (68 págs): conceitos do consórcio, contemplação, lance, regras de aquisição (bens móveis e imóveis), restrições (leilão/sinistro/chassi remarcado), penalidades, sistema de venda e canais de atendimento.",
+      "arquivo": "kb-bradesco-manual-parceiro.pdf"
+    },
+    {
+      "titulo": "Regulamento Bradesco — Bens Móveis (Resolução BCB 285)",
+      "descricao": "Regulamento oficial vigente do consórcio Bradesco de bens móveis (auto, moto, caminhões, tratores). Inclui contemplação, lance, transferência, cancelamento e regras pós Resolução BCB 285.",
+      "arquivo": "kb-bradesco-regulamento-movel.pdf"
+    },
+    {
+      "titulo": "Regulamento Bradesco — Imóveis (Resolução BCB 285)",
+      "descricao": "Regulamento oficial vigente do consórcio Bradesco de imóveis. Inclui 16+ modalidades de uso da carta, regras de construção/reforma, FGTS, garantia e pós Resolução BCB 285.",
+      "arquivo": "kb-bradesco-regulamento-imovel.pdf"
+    },
+    {
+      "titulo": "Folheto Consórcio PF — Tabela de Tarifas",
+      "descricao": "Folheto oficial Bradesco Consórcios PF com tabela completa de tarifas (transferência, cessão, substituição garantia, avaliação, 2ª via), telefones e canais.",
+      "arquivo": "kb-bradesco-folheto-tarifas.pdf"
+    },
+    {
+      "titulo": "Guia do Contemplado — Automóveis",
+      "descricao": "Passo a passo da pós-contemplação de auto: análise de crédito, vistoria, autorização de faturamento, documentos do vendedor (DUT/ATPV), alienação e pagamento.",
+      "arquivo": "kb-bradesco-guia-contemplado-auto.pdf"
+    },
+    {
+      "titulo": "Guia do Contemplado — Bens Não Alienáveis",
+      "descricao": "Procedimentos específicos para aeronaves, embarcações, jet ski, motorhome, máquinas: vistoria, apólice de seguro com cláusula beneficiária ao Bradesco, registro ANAC/Capitania.",
+      "arquivo": "kb-bradesco-guia-contemplado-nao-alienaveis.pdf"
+    },
+    {
+      "titulo": "Guia do Lance Embutido (Imóvel)",
+      "descricao": "Material oficial Bradesco sobre o lance embutido em imóvel: como funciona (até 30% da carta), exemplo prático, atenções (taxa adm sobre total, crédito reduzido).",
+      "arquivo": "kb-bradesco-lance-embutido.pdf"
+    },
+    {
+      "titulo": "Check-list FGTS — Amortização / Liquidação",
+      "descricao": "Documentos exigidos para amortização parcial ou liquidação total do saldo devedor com FGTS (consorciado + coobrigado): contratos, formulários 6565-061E, 6565-068E etc., IR.",
+      "arquivo": "kb-bradesco-checklist-fgts-amortizacao.pdf"
+    },
+    {
+      "titulo": "Instruções de Transferência de Cota",
+      "descricao": "Guia oficial Bradesco com instruções antes de iniciar o processo de transferência de cota: pré-requisitos do cessionário, documentos, etapas e taxas.",
+      "arquivo": "kb-bradesco-instrucoes-transferencia.pdf"
     }
   ]
 };
